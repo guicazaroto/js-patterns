@@ -11,7 +11,7 @@
     
     <h1 class="text-center">Negociações</h1>
     
-    <form class="form" onsubmit="neg.create(event)">
+    <form class="form" onsubmit="neg.addNegociation(event)">
         
         <div class="form-group">
             <label for="date">Data</label>
@@ -42,25 +42,13 @@
     <br>
     <br>
     
-    <table class="table table-hover table-bordered">
-        <thead>
-            <tr>
-                <th>DATA</th>
-                <th>QUANTIDADE</th>
-                <th>VALOR</th>
-                <th>VOLUME</th>
-            </tr>
-        </thead>
-        
-        <tbody>
-        </tbody>
-        
-        <tfoot>
-        </tfoot>
-    </table>
+    <div id="negociations-view"></div>
+
     <script src="./js//app/helpers/DateHelper.js"></script>
     <script src="./js/app/models/Negociation.js"></script>
+    <script src="./js/app/models/NegociationList.js"></script>
     <script src="./js//app/controllers/NegociationController.js"></script>
+    <script src="./js/app/views/NegociationsView.js"></script>
     <script>
         let neg = new NegociationController()
     </script>

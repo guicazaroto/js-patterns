@@ -3,6 +3,7 @@ class Negociation {
     this._date = new Date(date.getTime())
     this._quantity = quantity
     this._value = value
+    this._volume =  quantity * value
     Object.freeze(this) // impede modificações diretas nos atributos da classe
   }
 
@@ -20,5 +21,9 @@ class Negociation {
 
   get value () {
     return this._value
+  }
+
+  get volume () {
+    return this._volume
   }
 }

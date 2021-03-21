@@ -5,22 +5,30 @@ class NegociationController {
     this._date = $('#date')
     this._quantity = $('#quantity')
     this._value = $('#value')
+    this._negociationList = new NegociationList()
+    this._negociationsView = new NegociationsView($('#negociations-view'))
+
+    this._negociationsView.handler(this._negociationList)
   }
-  create (event) {
+  addNegociation (event) {
     event.preventDefault()
-    let date = DateHelper.convertTextToDate(this._date.value)
-    const negociation = new Negociation(
-      date,
-      this._quantity,
-      this._value
-    )
-
-    const teste = new DateHelper() 
-    console.log(teste)
-     this.renderNegociation(negociation)
+    this._negociationList.add(this._createNegociation())
+    this._negociationsView.handler(this._negociationList)
+    this._clearNegociationForm()
   }
 
-  renderNegociation (negociation) {
-    console.log(negociation)
+  _createNegociation () {
+    return new Negociation(
+      DateHelper.convertTextToDate(this._date.value),
+      this._quantity.value,
+      this._value.value
+    )
+  }
+
+  _clearNegociationForm() {
+    this._date.value = ''
+    this._quantity.value = 1
+    this._value.value = '0.00'
+    this._date.focus()
   }
 }
