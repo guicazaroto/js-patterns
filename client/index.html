@@ -10,7 +10,9 @@
 <body class="container">
     
     <h1 class="text-center">Negociações</h1>
-    
+
+    <div id="alert-view"></div>
+
     <form class="form" onsubmit="neg.addNegociation(event)">
         
         <div class="form-group">
@@ -48,7 +50,10 @@
     <script src="./js/app/models/Negociation.js"></script>
     <script src="./js/app/models/NegociationList.js"></script>
     <script src="./js//app/controllers/NegociationController.js"></script>
+    <script src="./js//app/views/ViewBase.js"></script>
     <script src="./js/app/views/NegociationsView.js"></script>
+    <script src="./js/app/views/AlertView.js"></script>
+    <script src="./js/app/models/AlertMessage.js"></script>
     <script>
         let neg = new NegociationController()
     </script>

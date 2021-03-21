@@ -1,10 +1,10 @@
-class NegociationsView {
+class NegociationsView extends ViewBase {
 
   constructor (element) {
-    this._domElement = element
+    super(element)
   }
 
-  _template(model) {
+  template(model) {
     return `
       <table class="table table-hover table-bordered">
         <thead>
@@ -37,10 +37,6 @@ class NegociationsView {
         </tfoot>
       </table>
     `
-  }
-
-  handler(model) {
-    this._domElement.innerHTML = this._template(model) 
   }
 
 }
