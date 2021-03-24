@@ -39,4 +39,12 @@ class NegociationController {
     this._value.value = '0.00'
     this._date.focus()
   }
+
+  clearNegociationTable () {
+    this._negociationList.clear()
+    this._negociationsView.handler(this._negociationList)
+
+    this._alertModel.message = 'Negociações apagadas com sucesso.'
+    this._alertView.handler(this._alertModel)
+  }
 }
