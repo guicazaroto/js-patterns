@@ -6,7 +6,7 @@ class NegociationController {
     this._quantity = $('#quantity')
     this._value = $('#value')
 
-    this._negociationList = new NegociationList()
+    this._negociationList = new NegociationList(model => this._negociationsView.handler(model))
     this._negociationsView = new NegociationsView($('#negociations-view'))
     this._negociationsView.handler(this._negociationList)
 
@@ -17,7 +17,6 @@ class NegociationController {
   addNegociation (event) {
     event.preventDefault()
     this._negociationList.add(this._createNegociation())
-    this._negociationsView.handler(this._negociationList)
 
     this._alertModel.message = 'Negociação adicionada com sucesso.'
     this._alertView.handler(this._alertModel)
@@ -42,7 +41,6 @@ class NegociationController {
 
   clearNegociationTable () {
     this._negociationList.clear()
-    this._negociationsView.handler(this._negociationList)
 
     this._alertModel.message = 'Negociações apagadas com sucesso.'
     this._alertView.handler(this._alertModel)
