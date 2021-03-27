@@ -5,11 +5,23 @@ class NegociationController {
     this._date = $('#date')
     this._quantity = $('#quantity')
     this._value = $('#value')
+    
 
-    this._negociationList = new NegociationList(model => this._negociationsView.handler(model))
+    let self = this
+    this._negociationList = new Proxy(new NegociationList(), {
+      get(target, key, receiver) {
+        if(['add', 'clear'].includes(key) && typeof(target[key]) == typeof(Function)) {
+          return function () {
+            Reflect.apply(target[key], target, arguments)
+            self._negociationsView.handler(target)
+          }
+        }
+        return Reflect.get(target, key, receiver)
+      }
+    })
+
     this._negociationsView = new NegociationsView($('#negociations-view'))
     this._negociationsView.handler(this._negociationList)
-
     this._alertModel = new AlertMessage()
     this._alertView = new AlertView($('#alert-view'))
     this._alertView.handler(this._alertModel)
