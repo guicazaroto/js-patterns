@@ -7,32 +7,27 @@ class NegociationController {
     this._value = $('#value')
     
 
-    let self = this
-    this._negociationList = new Proxy(new NegociationList(), {
-      get(target, key, receiver) {
-        if(['add', 'clear'].includes(key) && typeof(target[key]) == typeof(Function)) {
-          return function () {
-            Reflect.apply(target[key], target, arguments)
-            self._negociationsView.handler(target)
-          }
-        }
-        return Reflect.get(target, key, receiver)
-      }
-    })
-
     this._negociationsView = new NegociationsView($('#negociations-view'))
-    this._negociationsView.handler(this._negociationList)
-    this._alertModel = new AlertMessage()
+    this._negociationList = new Bind(
+      new NegociationList(),
+      this._negociationsView,
+      ['add', 'clear']
+    )
+
+
     this._alertView = new AlertView($('#alert-view'))
-    this._alertView.handler(this._alertModel)
+    this._alertModel = new Bind(
+      new AlertMessage(),
+      this._alertView,
+      ['message'],
+    )
   }
+  
   addNegociation (event) {
     event.preventDefault()
     this._negociationList.add(this._createNegociation())
-
     this._alertModel.message = 'Negociação adicionada com sucesso.'
-    this._alertView.handler(this._alertModel)
-    
+
     this._clearNegociationForm()
   }
 
@@ -53,8 +48,6 @@ class NegociationController {
 
   clearNegociationTable () {
     this._negociationList.clear()
-
     this._alertModel.message = 'Negociações apagadas com sucesso.'
-    this._alertView.handler(this._alertModel)
   }
 }
