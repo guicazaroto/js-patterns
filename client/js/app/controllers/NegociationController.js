@@ -6,20 +6,16 @@ class NegociationController {
     this._quantity = $('#quantity')
     this._value = $('#value')
     
-
-    this._negociationsView = new NegociationsView($('#negociations-view'))
     this._negociationList = new Bind(
       new NegociationList(),
-      this._negociationsView,
-      ['add', 'clear']
+      new NegociationsView($('#negociations-view')),
+      'add', 'clear'
     )
 
-
-    this._alertView = new AlertView($('#alert-view'))
     this._alertModel = new Bind(
       new AlertMessage(),
-      this._alertView,
-      ['message'],
+      new AlertView($('#alert-view')),
+      'message',
     )
   }
   
