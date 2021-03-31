@@ -34,7 +34,7 @@
     </form>
     
     <div class="text-center">
-        <button class="btn btn-primary text-center" type="button">
+        <button onclick="neg.importNegociations()" class="btn btn-primary text-center" type="button">
             Importar Negociações
         </button>
         <button onclick="neg.clearNegociationTable()" class="btn btn-primary text-center" type="button">
@@ -56,14 +56,6 @@
     <script src="./js/app/views/NegociationsView.js"></script>
     <script src="./js/app/views/AlertView.js"></script>
     <script src="./js/app/models/AlertMessage.js"></script>
-    <script>
-        let neg = new NegociationController()
-        let negociation = new Proxy(new Negociation(new Date(), 2, 3), {
-            get(target, key) {
-                console.log(target[key])
-            }
-        })
-
-    </script>
+    <script src="./js/app/index.js"></script>
 </body>
 </html>

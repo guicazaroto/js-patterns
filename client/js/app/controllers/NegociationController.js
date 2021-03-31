@@ -42,6 +42,25 @@ class NegociationController {
     this._date.focus()
   }
 
+  async importNegociations () {
+
+    try {
+      const res = await fetch(`/negociacoes/semana`)
+      const data = await res.json()
+      
+      this._addNegociationsToList(data)
+      this._alertModel.message = 'Negociações importadas com sucesso.'
+    } catch(err) {
+      this._alertModel.message = 'Ocorreu um erro ao importar as negociações.'
+    }
+  }
+
+  _addNegociationsToList (data) {
+    data
+    .map(n => new Negociation(new Date(n.data), n.quantidade, n.valor))
+    .forEach(i => this._negociationList.add(i))
+  }
+
   clearNegociationTable () {
     this._negociationList.clear()
     this._alertModel.message = 'Negociações apagadas com sucesso.'
