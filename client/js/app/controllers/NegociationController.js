@@ -43,11 +43,9 @@ class NegociationController {
   }
 
   async importNegociations () {
-
     try {
-      const res = await fetch(`/negociacoes/semana`)
-      const data = await res.json()
-      
+      const data = await new NegociationsService().getWeeklyNegociations()
+
       this._addNegociationsToList(data)
       this._alertModel.message = 'Negociações importadas com sucesso.'
     } catch(err) {
