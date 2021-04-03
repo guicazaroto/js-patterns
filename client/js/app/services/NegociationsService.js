@@ -5,4 +5,18 @@ class NegociationsService {
 
     return data
   }
+
+  async getBeforeNegociations () {
+    const res = await fetch(`/negociacoes/anterior`)
+    const data = await res.json()
+
+    return data
+  }
+
+  async getOlderNegociations () {
+    const res = await fetch(`/negociacoes/retrasada`)
+    const data = await res.json()
+
+    return data
+  }
 }
