@@ -43,13 +43,18 @@ class NegociationController {
   }
 
   async importNegociations () {
-    const res = await Promise.all([
-      this._importWeeklyNegociations(),
-      this._importBeforeWeekNegociations(),
-      this._importOlderNegociations()
-    ])
-
-    this._addNegociationsToList(res.flat())
+    try {
+      const res = await Promise.all([
+        this._importWeeklyNegociations(),
+        this._importBeforeWeekNegociations(),
+        this._importOlderNegociations()
+      ])
+  
+      this._addNegociationsToList(res.flat())
+      this._alertModel.message = 'Negociações importadas com sucesso.'
+    } catch (err) {
+      this._alertModel.message = 'Não foi possível importar as negociações.'
+    }
   }
 
   _importWeeklyNegociations () {
