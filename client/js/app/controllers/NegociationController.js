@@ -1,5 +1,4 @@
 class NegociationController {
-
   constructor () {
     const $ = document.querySelector.bind(document)
     this._date = $('#date')

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button onclick="addNegociation()">adicionar negociação</button>
+  <script src="./js/app/models/Negociation.js"></script>
+  <script>
+    let globalConnection;
+    createDataBase()
+
+    function createDataBase () {
+      const db = window.indexedDB.open('aluraframe', 10)
+
+      db.onupgradeneeded = e => {
+        console.log('Banco criado com sucesso!')
+        globalConnection = e.target.result
+
+        createTable()
+      }
+
+      db.onsuccess = e => {
+        console.log('conexão estabelecida com sucesso')
+        globalConnection = e.target.result
+      }
+
+      db.onerror = e => console.log(e.target.error)
+    }
+
+    function createTable() {
+      if(globalConnection.objectStoreNames.contains('negociations')) {
+          globalConnection.deleteObjectStore('negociations')
+        }
+        globalConnection.createObjectStore('negociations', { autoIncrement: true })
+    }
+
+    function addNegociation () {
+      let neg = new Negociation(new Date(), 1, 10)
+
+      let transaction = globalConnection.transaction(['negociations'], 'readwrite');
+      let store = transaction.objectStore('negociations')
+      let request = store.add(neg)
+
+      request.onsuccess = event => {
+        console.log('dado incluido com sucesso')
+      }
+
+      request.onerror = event => {
+        console.log('não foi possível incluir o dado no banco')
+      }
+    }
+
+  </script>
+</body>
+</html>
