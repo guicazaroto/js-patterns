@@ -8,13 +8,15 @@
 </head>
 <body>
   <button onclick="addNegociation()">adicionar negociação</button>
+  <button onclick="getNegociations()">Acessar negociações</button>
+
   <script src="./js/app/models/Negociation.js"></script>
   <script>
     let globalConnection;
     createDataBase()
 
     function createDataBase () {
-      const db = window.indexedDB.open('aluraframe', 10)
+      const db = window.indexedDB.open('aluraframe', 1)
 
       db.onupgradeneeded = e => {
         console.log('Banco criado com sucesso!')
@@ -39,11 +41,11 @@
     }
 
     function addNegociation () {
-      let neg = new Negociation(new Date(), 1, 10)
+      const neg = new Negociation(new Date(), 1, 10)
 
-      let transaction = globalConnection.transaction(['negociations'], 'readwrite');
-      let store = transaction.objectStore('negociations')
-      let request = store.add(neg)
+      const transaction = globalConnection.transaction(['negociations'], 'readwrite');
+      const store = transaction.objectStore('negociations')
+      const request = store.add(neg)
 
       request.onsuccess = event => {
         console.log('dado incluido com sucesso')
@@ -52,6 +54,32 @@
       request.onerror = event => {
         console.log('não foi possível incluir o dado no banco')
       }
+    }
+
+    function getNegociations () {
+      const transaction = globalConnection.transaction(['negociations'], 'readwrite');
+      const store = transaction.objectStore('negociations')
+
+      const cursor = store.openCursor()
+      const negociations = []
+
+      cursor.onsuccess = res => {
+        const result = res.target.result
+
+        if(result) {
+          let { _date, _quantity, _value } = result.value
+          negociations.push(new Negociation(_date, _quantity, _value))
+
+          result.continue()
+        } else {
+          console.log(negociations)
+        }
+      }
+
+      cursor.onerror = e => {
+        console.log(e.target.error.name)
+      }
+
     }
 
   </script>
