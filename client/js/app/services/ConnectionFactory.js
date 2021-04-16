@@ -3,7 +3,9 @@ const ConnectionFactory = (() => {
   const dbname = 'aluraframe'
   const version = 1
   const stores = ['negociations']
+  
   let connection = null
+  let close = null
   return class ConnectionFactory {
     constructor () {
       throw new Error('Is not possible instatiated this class!')
@@ -20,7 +22,13 @@ const ConnectionFactory = (() => {
         db.onsuccess = e => {
           if(!connection) {
             connection = e.target.result
+            close = connection.close.bind(connection)
+  
+            connection.close = () => {
+              throw new Error('It`s not possible call this method directly')
+            }
           }
+
           resolve(connection)
         }
 
@@ -36,8 +44,13 @@ const ConnectionFactory = (() => {
           db.deleteObjectStore(store)
         }
 
-        db.createObjectStore(store, { autoincrement: true })
+        db.createObjectStore(store, { autoIncrement: true })
       })
+    }
+
+    static closeConnection () {
+      close()
+      connection = null
     }
   }
 

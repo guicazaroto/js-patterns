@@ -18,12 +18,20 @@ class NegociationController {
     )
   }
   
-  addNegociation (event) {
+  async addNegociation (event) {
     event.preventDefault()
-    this._negociationList.add(this._createNegociation())
-    this._alertModel.message = 'Negociação adicionada com sucesso.'
 
-    this._clearNegociationForm()
+    try {
+      const connection = await ConnectionFactory.getConnection()
+      const dao = await new NegociationDao(connection)
+        .add(this._createNegociation())
+
+      this._negociationList.add(this._createNegociation())
+      this._alertModel.message = 'Negociação adicionada com sucesso.'
+      this._clearNegociationForm()
+    } catch (err) {
+      this._alertModel.message = err
+    }
   }
 
   _createNegociation () {
