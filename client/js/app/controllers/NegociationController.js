@@ -16,6 +16,15 @@ class NegociationController {
       new AlertView($('#alert-view')),
       'message',
     )
+
+    ConnectionFactory
+      .getConnection()
+      .then(conn => new NegociationDao(conn))
+      .then(dao => dao.getAll())
+      .then(negociations => negociations
+        .forEach(i => this._negociationList.add(i))
+      )
+
   }
   
   async addNegociation (event) {
@@ -37,8 +46,8 @@ class NegociationController {
   _createNegociation () {
     return new Negociation(
       DateHelper.convertTextToDate(this._date.value),
-      this._quantity.value,
-      this._value.value
+      Number(this._quantity.value),
+      Number(this._value.value)
     )
   }
 
@@ -82,7 +91,14 @@ class NegociationController {
     .forEach(i => this._negociationList.add(i))
   }
 
-  clearNegociationTable () {
+  clearNegociations() {
+    ConnectionFactory
+    .getConnection()
+    .then(conn => new NegociationDao(conn))
+    .then(dao => dao.clear())
+    .then(res => this._alertModel.message = res)
+    .catch(err => console.log(err))
+
     this._negociationList.clear()
     this._alertModel.message = 'Negociações apagadas com sucesso.'
   }
