@@ -88,14 +88,16 @@ class NegociationController {
   _addNegociationsToList (data) {
     data
     .map(n => new Negociation(new Date(n.data), n.quantidade, n.valor))
-    .forEach( negociation => {
-      const alreadyStored = this._negociationList.list
-        .some(x => JSON.stringify(x) == JSON.stringify(negociation))
-      
-      if(!alreadyStored) {
+    .forEach(negociation => {
+      if(!this._isNegociationAlreadyStored(negociation)) {
         this._negociationList.add(negociation)
       }
     })
+  }
+
+  _isNegociationAlreadyStored(negociation) {
+    return this._negociationList.list
+      .some(x => JSON.stringify(x) == JSON.stringify(negociation))
   }
 
   clearNegociations() {
