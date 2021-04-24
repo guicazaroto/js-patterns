@@ -16,7 +16,13 @@ class NegociationController {
       new AlertView($('#alert-view')),
       'message',
     )
+    
+    this._init()
 
+
+  }
+
+  _init() {
     ConnectionFactory
       .getConnection()
       .then(conn => new NegociationDao(conn))
@@ -25,18 +31,20 @@ class NegociationController {
         .forEach(i => this._negociationList.add(i))
       )
 
+    setTimeout(() => this.importNegociations(), 3000)
   }
   
   async addNegociation (event) {
     event.preventDefault()
-
+    const negociationService = new NegociationsService()
+    const negociation = this._createNegociation()
+  
     try {
-      const connection = await ConnectionFactory.getConnection()
-      const dao = await new NegociationDao(connection)
-        .add(this._createNegociation())
+      const res = await negociationService
+        .registerNegociation(negociation)
 
-      this._negociationList.add(this._createNegociation())
-      this._alertModel.message = 'Negociação adicionada com sucesso.'
+      this._negociationList.add(negociation)
+      this._alertModel.message = res
       this._clearNegociationForm()
     } catch (err) {
       this._alertModel.message = err
