@@ -4,7 +4,8 @@ class NegociationController {
     this._date = $('#date')
     this._quantity = $('#quantity')
     this._value = $('#value')
-    
+    this._service = new NegociationsService()
+
     this._negociationList = new Bind(
       new NegociationList(),
       new NegociationsView($('#negociations-view')),
@@ -23,24 +24,21 @@ class NegociationController {
   }
 
   _init() {
-    ConnectionFactory
-      .getConnection()
-      .then(conn => new NegociationDao(conn))
-      .then(dao => dao.getAll())
+    this._service
+      .getAll()
       .then(negociations => negociations
-        .forEach(i => this._negociationList.add(i))
-      )
+        .forEach(negociation => this._negociationList.add(negociation))
+      ).catch(err => this._alertModel.message = err)
 
-    setTimeout(() => this.importNegociations(), 3000)
+    setInterval(() => this.importNegociations(), 10000)
   }
   
   async addNegociation (event) {
     event.preventDefault()
-    const negociationService = new NegociationsService()
     const negociation = this._createNegociation()
   
     try {
-      const res = await negociationService
+      const res = await this._service
         .registerNegociation(negociation)
 
       this._negociationList.add(negociation)
@@ -82,15 +80,15 @@ class NegociationController {
   }
 
   _importWeeklyNegociations () {
-    return new NegociationsService().getWeeklyNegociations()
+    return this._service.getWeeklyNegociations()
   }
 
   _importBeforeWeekNegociations () {
-    return new NegociationsService().getBeforeNegociations()
+    return this._service.getBeforeNegociations()
   }
 
   _importOlderNegociations () {
-    return new NegociationsService().getOlderNegociations()
+    return this._service.getOlderNegociations()
   }
 
   _addNegociationsToList (data) {
@@ -108,15 +106,13 @@ class NegociationController {
       .some(x => JSON.stringify(x) == JSON.stringify(negociation))
   }
 
-  clearNegociations() {
-    ConnectionFactory
-    .getConnection()
-    .then(conn => new NegociationDao(conn))
-    .then(dao => dao.clear())
-    .then(res => this._alertModel.message = res)
-    .catch(err => console.log(err))
-
-    this._negociationList.clear()
-    this._alertModel.message = 'Negociações apagadas com sucesso.'
+  async clearNegociations() {
+    try { 
+      const res = await this._service.clearNegociations()
+      this._alertModel.message = res
+      this._negociationList.clear()
+    } catch(err) {
+      this._alertModel.message = err
+    }
   }
 }
