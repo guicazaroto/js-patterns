@@ -9,6 +9,4 @@ class AlertMessage {
   set message (msg) {
     return this._message = msg 
   }
-
-
 }
