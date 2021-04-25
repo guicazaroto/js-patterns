@@ -1,4 +1,4 @@
-## Design Patterns Alura JS
+## Design Patterns JS
 
 ### How to run
 
