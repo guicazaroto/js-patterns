@@ -8,7 +8,7 @@ class NegociationsService {
   }
 
   getBeforeNegociations () {
-    return this.http.get(`/negociacoes/antersior`)
+    return this.http.get(`/negociacoes/anterior`)
   }
 
   getOlderNegociations () {
